@@ -15,19 +15,19 @@ class ViewController: UIViewController {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
 		
-		let CoreDataNotebookClassName:String = String(describing: Notebook.self)
-		let CoreDataNotesClassName:String = String(describing: Note.self)
+//		let CoreDataNotebookClassName:String = String(describing: Notebook.self)
+//		let CoreDataNotesClassName:String = String(describing: Note.self)
+//		
+//
+//		let notebook:Notebook = NSEntityDescription.insertNewObject(forEntityName:	CoreDataNotebookClassName, into: DatabaseController.getContext()) as! Notebook
+//		
+//		notebook.title = "Flowers"
+//		
+//		let note:Note = NSEntityDescription.insertNewObject(forEntityName: CoreDataNotesClassName, into: DatabaseController.getContext()) as! Note
+//		
+		//  note.text = "Note text"
 		
-		
-		let notebook:Notebook = NSEntityDescription.insertNewObject(forEntityName: CoreDataNotebookClassName, into: DatabaseController.getContext()) as! Notebook
-		
-		notebook.title = "Flowers"
-		
-		let note:Note = NSEntityDescription.insertNewObject(forEntityName: CoreDataNotesClassName, into: DatabaseController.getContext()) as! Note
-		
-		note.text = "Note text"
-		
-		 notebook.addToNotes(note)
+		// notebook.addToNotes(note)
 		
 		// https://revs.runtime-revolution.com/core-data-on-ios-10-a-brief-overview-with-an-example-dc6e0ce844a5
 		// https://www.youtube.com/watch?v=da6W7wDh0Dw&t=1123s
@@ -40,7 +40,19 @@ class ViewController: UIViewController {
 		
 		// ** Setup predicate for searching the Notebook (filter)
 		let fetechRequest:NSFetchRequest<Notebook> = Notebook.fetchRequest()
-		let predicate = NSPredicate(format: "title == 'Trees'")
+		
+		// Set the batch size to a suitable number (optional).
+		fetechRequest.fetchBatchSize = 20
+		
+		// Create at least one sort order attribute and type (ascending\descending)
+		let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+		
+		// Set the sort objects to the fetch request.
+		fetechRequest.sortDescriptors = [sortDescriptor]
+		
+		//	let predicate = NSPredicate(format: "title == 'Trees' AND title =='Flowers'")
+		let predicate = NSPredicate(format: "title == %@ OR title == %@", "Trees", "Flowers")
+
 		fetechRequest.predicate = predicate
 		
 		
